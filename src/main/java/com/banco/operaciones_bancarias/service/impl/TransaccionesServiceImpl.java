@@ -33,4 +33,19 @@ public class TransaccionesServiceImpl implements ITransaccionesService{
                             .then(Mono.just(response));
                 });
     }
+
+    @Override
+    public Mono<ResponseDTO<?>> procesarDeposito(DepositoCuentaRequestDTO request, String token) {
+        return auditoriaLogger.logEventoAuditoriaDeposito(Constants.INICIO, request, Constants.DEPOSITO)
+                .then(coreBancarioSofka.obtenerSaldoCuentaDeposito(request, token))
+                .flatMap(response -> {
+                    if (response.getCode() != 200) {
+                        return auditoriaLogger.logEventoAuditoriaDeposito(Constants.ERROR, request, Constants.DEPOSITO)
+                                .then(Mono.just(response));
+                    }
+                    return auditoriaLogger.logEventoAuditoriaDeposito(Constants.EXITO, request, Constants.DEPOSITO)
+                            .then(Mono.just(response));
+                });
+    }
+
 }
