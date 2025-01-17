@@ -17,4 +17,12 @@ public interface IEventoAuditoriaMapper {
     @Mapping(target = "estado", source = "estado")
     @Mapping(target = "tipoTransaccion", source = "tipoTransaccion")
     EventoAuditoria toEventoAuditoria(String estado, RetiroCuentaRequestDTO request, String tipoTransaccion);
+
+    @Mapping(target = "cuentaId", source = "request.numeroCuenta")
+    @Mapping(target = "monto", source = "request.monto")
+    @Mapping(target = "fecha", expression = "java(java.time.Instant.now())")
+    @Mapping(target = "estado", source = "estado")
+    @Mapping(target = "tipoTransaccion", source = "tipoTransaccion")
+    EventoAuditoria toEventoAuditoriaDeposito(String estado, DepositoCuentaRequestDTO request, String tipoTransaccion);
+
 }
