@@ -1,0 +1,12 @@
+package com.banco.operaciones_bancarias.service;
+
+import com.banco.operaciones_bancarias.dto.request.DepositoCuentaRequestDTO;
+import com.banco.operaciones_bancarias.dto.request.RetiroCuentaRequestDTO;
+import com.banco.operaciones_bancarias.dto.response.ResponseDTO;
+
+import reactor.core.publisher.Mono;
+
+public interface ITransaccionesService {
+    public Mono<ResponseDTO<?>> procesarRetiro(RetiroCuentaRequestDTO request, String token);
+    public Mono<ResponseDTO<?>> procesarDeposito(DepositoCuentaRequestDTO request, String token);
+}
