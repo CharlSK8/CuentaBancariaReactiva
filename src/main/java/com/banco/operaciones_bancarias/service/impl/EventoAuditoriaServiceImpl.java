@@ -12,4 +12,12 @@ import reactor.core.publisher.Flux;
 @Service
 @RequiredArgsConstructor
 public class EventoAuditoriaServiceImpl implements IEventoAuditoriaService{
+
+    private final IEventoAuditoriaRepository eventoAuditoriaRepository;
+
+    @Override
+    public Flux<EventoAuditoria> streamEventosAuditoria(int cuentaId) {
+        return eventoAuditoriaRepository.findWithTailableCursorByCuentaId(cuentaId);
+    }
+
 }
