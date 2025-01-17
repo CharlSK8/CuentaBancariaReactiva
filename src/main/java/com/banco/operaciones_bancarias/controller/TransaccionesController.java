@@ -27,4 +27,15 @@ import reactor.core.publisher.Mono;
 @CrossOrigin(origins = "http://localhost:4200")
 @Tag(name = "Transacciones", description = "API para transacciones bancarias")
 public class TransaccionesController {
+    private final ITransaccionesService transaccionesService;
+    private final AuditoriaLogger auditoriaLogger;
+
+    @PostMapping("/retiro")
+    @Operation(summary = "Procesar retiro", description = "Procesar retiro de una cuenta")
+    public Mono<ResponseEntity<ResponseDTO<Object>>> procesarRetiro(@RequestBody RetiroCuentaRequestDTO request, @RequestHeader("Authorization") String token) {
+        return transaccionesService.procesarRetiro(request, token)
+                .map(result -> ResponseEntity.ok(ResponseDTO.builder().response(result.getResponse()).code(result.getCode()).message(result.getMessage()).build()))
+                .doOnError(e -> auditoriaLogger.logEventoAuditoria(Constants.ERROR, request, Constants.RETIRO).subscribe())
+                .onErrorResume(e -> Mono.just(ResponseEntity.badRequest().body(ResponseDTO.builder().message(e.getMessage()).code(HttpStatus.BAD_REQUEST.value()).build())));
+    }
 }
