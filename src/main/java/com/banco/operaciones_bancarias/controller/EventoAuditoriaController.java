@@ -21,4 +21,12 @@ import reactor.core.publisher.Flux;
 @CrossOrigin(origins = "http://localhost:4200")
 @Tag(name = "EventoAuditoria", description = "API para eventos de auditoría")
 public class EventoAuditoriaController {
+
+    private final IEventoAuditoriaService eventoAuditoriaService;
+
+    @GetMapping(value = "/stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public Flux<EventoAuditoria> streamEventoAuditoria(@RequestParam int cuentaId) {
+        return eventoAuditoriaService.streamEventosAuditoria(cuentaId);
+    }
+
 }
