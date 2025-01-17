@@ -16,4 +16,21 @@ import reactor.core.publisher.Mono;
 @Service
 @RequiredArgsConstructor
 public class TransaccionesServiceImpl implements ITransaccionesService{
+
+    private final CoreBancarioSofka coreBancarioSofka;
+    private final AuditoriaLogger auditoriaLogger;
+
+    @Override
+    public Mono<ResponseDTO<?>> procesarRetiro(RetiroCuentaRequestDTO request, String token) {
+        return auditoriaLogger.logEventoAuditoria(Constants.INICIO, request, Constants.RETIRO)
+                .then(coreBancarioSofka.obtenerSaldoCuenta(request, token))
+                .flatMap(response -> {
+                    if (response.getCode() != 200) {
+                        return auditoriaLogger.logEventoAuditoria(Constants.ERROR, request, Constants.RETIRO)
+                                .then(Mono.just(response));
+                    }
+                    return auditoriaLogger.logEventoAuditoria(Constants.EXITO, request, Constants.RETIRO)
+                            .then(Mono.just(response));
+                });
+    }
 }

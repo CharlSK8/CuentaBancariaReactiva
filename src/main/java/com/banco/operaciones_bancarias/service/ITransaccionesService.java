@@ -7,4 +7,5 @@ import com.banco.operaciones_bancarias.dto.response.ResponseDTO;
 import reactor.core.publisher.Mono;
 
 public interface ITransaccionesService {
+    public Mono<ResponseDTO<?>> procesarRetiro(RetiroCuentaRequestDTO request, String token);
 }
