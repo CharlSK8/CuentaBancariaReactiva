@@ -25,6 +25,7 @@ public class EventoAuditoriaController {
     private final IEventoAuditoriaService eventoAuditoriaService;
 
     @GetMapping(value = "/stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    @Operation(summary = "Stream de eventos de auditoría", description = "Stream de eventos de auditoría para una cuenta específica")
     public Flux<EventoAuditoria> streamEventoAuditoria(@RequestParam int cuentaId) {
         return eventoAuditoriaService.streamEventosAuditoria(cuentaId);
     }
