@@ -88,7 +88,7 @@ Swagger es una herramienta poderosa para documentar y probar APIs RESTful. En es
 
 La documentación de Swagger para esta aplicación está disponible en la siguiente URL:
 
-`http://localhost:8093/swagger-ui/index.html`
+`http://localhost:8093/webjars/swagger-ui/index.html`
 
 Al acceder a esta URL, se puede visualizar una interfaz gráfica que muestra todos los endpoints disponibles, junto con sus métodos HTTP, parámetros requeridos, y posibles respuestas. Además, Swagger permite probar directamente los endpoints desde la interfaz, lo que facilita la verificación y el debugging de la API.
 
