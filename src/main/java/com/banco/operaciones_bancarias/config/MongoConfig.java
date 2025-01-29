@@ -20,7 +20,7 @@ public class MongoConfig {
         String collectionName = "evento_auditoria";
         reactiveMongoTemplate.collectionExists(collectionName)
             .flatMap(exists -> {
-                if (Boolean.TRUE.equals(exists)) {
+                if (!Boolean.TRUE.equals(exists)) {
                     return reactiveMongoTemplate.createCollection(collectionName, 
                         CollectionOptions.empty().capped().size(10485760)
                     );
