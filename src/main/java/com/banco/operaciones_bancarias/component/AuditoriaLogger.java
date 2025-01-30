@@ -19,8 +19,8 @@ public class AuditoriaLogger {
     private final IEventoAuditoriaRepository eventoAuditoriaRepository;
     private final IEventoAuditoriaMapper eventoAuditoriaMapper;
 
-    public Mono<Void> logEventoAuditoria(String estado, RetiroCuentaRequestDTO request, String tipoTransaccion) {
-        return eventoAuditoriaRepository.save(eventoAuditoriaMapper.toEventoAuditoria(estado, request, tipoTransaccion)).then();
+    public Mono<Void> logEventoAuditoria(String estado, RetiroCuentaRequestDTO request, String tipoTransaccion, BigDecimal saldoActual) {
+        return eventoAuditoriaRepository.save(eventoAuditoriaMapper.toEventoAuditoria(estado, request, tipoTransaccion, saldoActual)).then();
     }
 
     public Mono<Void> logEventoAuditoriaDeposito(String estado, DepositoCuentaRequestDTO request, String tipoTransaccion, BigDecimal saldoActual) {
