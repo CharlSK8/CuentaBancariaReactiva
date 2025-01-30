@@ -53,7 +53,7 @@ class TransaccionesControllerTest {
                 
                 when(transaccionesService.procesarRetiro(any(), any()))
                         .thenReturn(Mono.just(expectedResponse));
-                when(auditoriaLogger.logEventoAuditoria(any(), any(), any()))
+                when(auditoriaLogger.logEventoAuditoria(any(), any(), any(), any()))
                         .thenReturn(Mono.empty());
 
                 StepVerifier.create(transaccionesController.procesarRetiro(request, TOKEN))
@@ -97,7 +97,7 @@ class TransaccionesControllerTest {
                 
                 when(transaccionesService.procesarRetiro(any(), any()))
                         .thenReturn(Mono.error(new RuntimeException("Error en el retiro")));
-                when(auditoriaLogger.logEventoAuditoria(any(), any(), any()))
+                when(auditoriaLogger.logEventoAuditoria(any(), any(), any(), any()))
                         .thenReturn(Mono.empty());
 
                 StepVerifier.create(transaccionesController.procesarRetiro(request, TOKEN))
