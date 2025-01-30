@@ -38,7 +38,7 @@ public class TransaccionesController {
     public Mono<ResponseEntity<ResponseDTO<Object>>> procesarRetiro(@RequestBody RetiroCuentaRequestDTO request, @RequestHeader("Authorization") String token) {
         return transaccionesService.procesarRetiro(request, token)
                 .map(result -> ResponseEntity.ok(ResponseDTO.builder().response(result.getResponse()).code(result.getCode()).message(result.getMessage()).build()))
-                .doOnError(e -> auditoriaLogger.logEventoAuditoria(Constants.ERROR, request, Constants.RETIRO).subscribe())
+                .doOnError(e -> auditoriaLogger.logEventoAuditoria(Constants.ERROR, request, Constants.RETIRO, BigDecimal.ZERO).subscribe())
                 .onErrorResume(e -> Mono.just(ResponseEntity.badRequest().body(ResponseDTO.builder().message(e.getMessage()).code(HttpStatus.BAD_REQUEST.value()).build())));
     }
 
