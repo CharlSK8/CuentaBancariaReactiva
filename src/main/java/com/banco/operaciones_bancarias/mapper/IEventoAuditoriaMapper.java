@@ -18,7 +18,8 @@ public interface IEventoAuditoriaMapper {
     @Mapping(target = "fecha", expression = "java(java.time.Instant.now())")
     @Mapping(target = "estado", source = "estado")
     @Mapping(target = "tipoTransaccion", source = "tipoTransaccion")
-    EventoAuditoria toEventoAuditoria(String estado, RetiroCuentaRequestDTO request, String tipoTransaccion);
+    @Mapping(target = "saldoActual", source = "saldoActual")
+    EventoAuditoria toEventoAuditoria(String estado, RetiroCuentaRequestDTO request, String tipoTransaccion, BigDecimal saldoActual);
 
     @Mapping(target = "cuentaId", source = "request.numeroCuenta")
     @Mapping(target = "monto", source = "request.monto")
