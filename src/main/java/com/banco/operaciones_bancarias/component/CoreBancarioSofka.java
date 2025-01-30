@@ -48,14 +48,12 @@ public class CoreBancarioSofka {
             .headers(headers -> headers.setBearerAuth(token))
             .retrieve()
             .onStatus(status -> status.is4xxClientError() || status.is5xxServerError(),
-                response -> response.bodyToMono(String.class) // Leer el cuerpo como String para manejar errores genéricos
+                response -> response.bodyToMono(String.class)
                     .flatMap(errorBody -> {
-                        // Crear una excepción con el mensaje de error
                         return Mono.error(new RuntimeException("Error en la solicitud: " + errorBody));
                     }))
             .bodyToMono(new ParameterizedTypeReference<ResponseDTO<?>>() {})
             .onErrorResume(error -> {
-                // Manejar errores genéricos (por ejemplo, errores de red)
                 return Mono.error(new RuntimeException("Error al obtener el saldo: " + error.getMessage()));
             });
 }
