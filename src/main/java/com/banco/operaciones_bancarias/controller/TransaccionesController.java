@@ -1,5 +1,7 @@
 package com.banco.operaciones_bancarias.controller;
 
+import java.math.BigDecimal;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -45,7 +47,7 @@ public class TransaccionesController {
     public Mono<ResponseEntity<ResponseDTO<Object>>> procesarDeposito(@RequestBody DepositoCuentaRequestDTO request, @RequestHeader("Authorization") String token) {
         return transaccionesService.procesarDeposito(request, token)
                 .map(result -> ResponseEntity.ok(ResponseDTO.builder().response(result.getResponse()).code(result.getCode()).message(result.getMessage()).build()))
-                .doOnError(e -> auditoriaLogger.logEventoAuditoriaDeposito(Constants.ERROR, request, Constants.DEPOSITO).subscribe())
+                .doOnError(e -> auditoriaLogger.logEventoAuditoriaDeposito(Constants.ERROR, request, Constants.DEPOSITO, BigDecimal.ZERO).subscribe())
                 .onErrorResume(e -> Mono.just(ResponseEntity.badRequest().body(ResponseDTO.builder().message(e.getMessage()).code(HttpStatus.BAD_REQUEST.value()).build())));
     }
 
