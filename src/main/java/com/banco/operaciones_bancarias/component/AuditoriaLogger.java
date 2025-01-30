@@ -1,5 +1,7 @@
 package com.banco.operaciones_bancarias.component;
 
+import java.math.BigDecimal;
+
 import org.springframework.stereotype.Component;
 
 import com.banco.operaciones_bancarias.dto.request.DepositoCuentaRequestDTO;
@@ -21,8 +23,8 @@ public class AuditoriaLogger {
         return eventoAuditoriaRepository.save(eventoAuditoriaMapper.toEventoAuditoria(estado, request, tipoTransaccion)).then();
     }
 
-    public Mono<Void> logEventoAuditoriaDeposito(String estado, DepositoCuentaRequestDTO request, String tipoTransaccion) {
-        return eventoAuditoriaRepository.save(eventoAuditoriaMapper.toEventoAuditoriaDeposito(estado, request, tipoTransaccion)).then();
+    public Mono<Void> logEventoAuditoriaDeposito(String estado, DepositoCuentaRequestDTO request, String tipoTransaccion, BigDecimal saldoActual) {
+        return eventoAuditoriaRepository.save(eventoAuditoriaMapper.toEventoAuditoriaDeposito(estado, request, tipoTransaccion, saldoActual)).then();
     }
 
 }
