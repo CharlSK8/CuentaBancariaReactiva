@@ -22,7 +22,8 @@ public class CoreBancarioSofka {
         return webClient.post()
                 .uri("/api/v1/cuenta-bancaria/retiro-cuenta")
                 .bodyValue(request)
-                .headers(headers -> headers.setBearerAuth(token))
+                //.headers(headers -> headers.setBearerAuth(token))
+                .headers(headers -> headers.set("Authorization", token))
                 .retrieve()
                 .onStatus(status -> status.is4xxClientError() || status.is5xxServerError(),
                     response -> response.bodyToMono(ResponseDTO.class)
@@ -34,7 +35,8 @@ public class CoreBancarioSofka {
         return webClient.post()
                 .uri("/api/v1/cuenta-bancaria/deposito-cuenta")
                 .bodyValue(request)
-                .headers(headers -> headers.setBearerAuth(token))
+                //.headers(headers -> headers.setBearerAuth(token))
+                .headers(headers -> headers.set("Authorization", token))
                 .retrieve()
                 .onStatus(status -> status.is4xxClientError() || status.is5xxServerError(),
                     response -> response.bodyToMono(ResponseDTO.class)
@@ -45,7 +47,8 @@ public class CoreBancarioSofka {
     public Mono<ResponseDTO<?>> saldoCuenta(int numeroCuenta, String token) {
     return webClient.get()
             .uri("/api/v1/cuenta-bancaria/mostrar-saldo-actual/{numeroCuenta}", numeroCuenta)
-            .headers(headers -> headers.setBearerAuth(token))
+            //.headers(headers -> headers.setBearerAuth(token))
+            .headers(headers -> headers.set("Authorization", token))
             .retrieve()
             .onStatus(status -> status.is4xxClientError() || status.is5xxServerError(),
                 response -> response.bodyToMono(String.class)
