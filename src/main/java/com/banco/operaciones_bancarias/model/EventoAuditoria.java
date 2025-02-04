@@ -22,5 +22,6 @@ public class EventoAuditoria {
     private Instant fecha;
     private String estado;
     private String tipoTransaccion;
+    private BigDecimal saldoActual;
 
 }
