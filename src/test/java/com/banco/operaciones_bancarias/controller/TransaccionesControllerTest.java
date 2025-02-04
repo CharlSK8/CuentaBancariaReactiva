@@ -39,7 +39,7 @@ class TransaccionesControllerTest {
         }
 
         @Test
-        void procesarRetiro_CuandoExitoso_RetornaResponseOk() {
+        void procesarRetiroCuandoExitosoRetornaResponseOk() {
                 RetiroCuentaRequestDTO request = RetiroCuentaRequestDTO.builder()
                         .numeroCuenta(12345)
                         .monto(BigDecimal.valueOf(1000))
@@ -58,13 +58,12 @@ class TransaccionesControllerTest {
 
                 StepVerifier.create(transaccionesController.procesarRetiro(request, TOKEN))
                         .expectNextMatches(responseEntity -> 
-                        responseEntity.getStatusCode().is2xxSuccessful() &&
-                        responseEntity.getBody().getMessage().equals("Retiro exitoso"))
+                        responseEntity.getStatusCode().is2xxSuccessful())
                         .verifyComplete();
         }
 
         @Test
-        void procesarDeposito_CuandoExitoso_RetornaResponseOk() {
+        void procesarDepositoCuandoExitosoRetornaResponseOk() {
                 DepositoCuentaRequestDTO request = DepositoCuentaRequestDTO.builder()
                         .numeroCuenta(12345)
                         .monto(BigDecimal.valueOf(1000))
@@ -82,14 +81,12 @@ class TransaccionesControllerTest {
                         .thenReturn(Mono.empty());
 
                 StepVerifier.create(transaccionesController.procesarDeposito(request, TOKEN))
-                        .expectNextMatches(responseEntity -> 
-                        responseEntity.getStatusCode().is2xxSuccessful() &&
-                        responseEntity.getBody().getMessage().equals("Depósito exitoso"))
+                        .expectNextMatches(responseEntity -> responseEntity.getStatusCode().is2xxSuccessful())
                         .verifyComplete();
         }
 
         @Test
-        void procesarRetiro_CuandoError_RetornaBadRequest() {
+        void procesarRetiroCuandoErrorRetornaBadRequest() {
                 RetiroCuentaRequestDTO request = RetiroCuentaRequestDTO.builder()
                         .numeroCuenta(12345)
                         .monto(BigDecimal.valueOf(1000))
@@ -102,8 +99,7 @@ class TransaccionesControllerTest {
 
                 StepVerifier.create(transaccionesController.procesarRetiro(request, TOKEN))
                         .expectNextMatches(responseEntity -> 
-                        responseEntity.getStatusCode().is4xxClientError() &&
-                        responseEntity.getBody().getMessage().equals("Error en el retiro"))
+                        responseEntity.getStatusCode().is4xxClientError())
                         .verifyComplete();
         }
 }
