@@ -49,12 +49,8 @@ public class CoreBancarioSofka {
             .retrieve()
             .onStatus(status -> status.is4xxClientError() || status.is5xxServerError(),
                 response -> response.bodyToMono(String.class)
-                    .flatMap(errorBody -> {
-                        return Mono.error(new RuntimeException("Error en la solicitud: " + errorBody));
-                    }))
+                    .flatMap(errorBody -> Mono.error(new RuntimeException("Error en la solicitud: " + errorBody))))
             .bodyToMono(new ParameterizedTypeReference<ResponseDTO<?>>() {})
-            .onErrorResume(error -> {
-                return Mono.error(new RuntimeException("Error al obtener el saldo: " + error.getMessage()));
-            });
+            .onErrorResume(error ->  Mono.error(new RuntimeException("Error al obtener el saldo: " + error.getMessage())));
 }
 }
