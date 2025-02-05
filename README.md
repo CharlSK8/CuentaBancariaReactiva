@@ -20,7 +20,13 @@ Este documento proporciona los pasos para obtener, ejecutar y administrar un con
   podman login ghcr.io -u <USERNAME> -p <PASSWORD> ghcr.io 
   ```
 
-## Descargar y Ejecutar la Imagen
+## Descargar y ejecutar el proyecto en contenedor
+
+- **Crear network**
+
+    ```sh
+    podman network create red-bank
+    ```
 
 - **Descargar la imagen desde GHCR**
 
@@ -31,7 +37,7 @@ Este documento proporciona los pasos para obtener, ejecutar y administrar un con
 - **Correr el contenedor**
 
     ```sh
-    podman run --rm --name <CONTAINER-NAME> -p 8093:8093 -d ghcr.io/charlsk8/operaciones_bancarias:v1.0.0 
+    podman run --rm --name reactivo --network=red-bank -p 8093:8093 -d ghcr.io/charlsk8/operaciones_bancarias:v1.0.0 
     ```
 
 - **Probar la Aplicación**
@@ -40,12 +46,18 @@ Este documento proporciona los pasos para obtener, ejecutar y administrar un con
     curl http://localhost:8093/api/v1/auditoria/stream?cuentaId=1198031672
     ```
 
-## Generar imagen
+## Generar imagen local
 
 - **Construir imagen**
 
     ```sh
-    podman build -t <IMAGE-NAME> -f Containerfile . 
+    podman build -t operaciones-bancarias -f Containerfile . 
+    ```
+
+- **Correr el contenedor**
+
+    ```sh
+    podman run --rm --name reactivo --network=red-bank -p 8093:8093 -d operaciones-bancarias
     ```
 
 ## Componentes Principales
