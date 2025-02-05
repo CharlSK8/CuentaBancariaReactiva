@@ -7,6 +7,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import com.banco.operaciones_bancarias.dto.request.DepositoCuentaRequestDTO;
 import com.banco.operaciones_bancarias.dto.request.RetiroCuentaRequestDTO;
 import com.banco.operaciones_bancarias.dto.response.ResponseDTO;
+import com.banco.operaciones_bancarias.utils.Constants;
 
 import reactor.core.publisher.Mono;
 
@@ -16,13 +17,13 @@ public class CoreBancarioSofka {
     private final WebClient webClient;
 
     public CoreBancarioSofka(WebClient.Builder webClientBuilder) {
-        this.webClient = webClientBuilder.baseUrl("http://localhost:8080").build();
+        this.webClient = webClientBuilder.baseUrl("http://jwt:8080").build();
     }
     public Mono<ResponseDTO<?>> retiroCuenta(RetiroCuentaRequestDTO request, String token) {
         return webClient.post()
                 .uri("/api/v1/cuenta-bancaria/retiro-cuenta")
                 .bodyValue(request)
-                .headers(headers -> headers.setBearerAuth(token))
+                .headers(headers -> headers.set(Constants.AUTH, token))
                 .retrieve()
                 .onStatus(status -> status.is4xxClientError() || status.is5xxServerError(),
                     response -> response.bodyToMono(ResponseDTO.class)
@@ -34,7 +35,7 @@ public class CoreBancarioSofka {
         return webClient.post()
                 .uri("/api/v1/cuenta-bancaria/deposito-cuenta")
                 .bodyValue(request)
-                .headers(headers -> headers.setBearerAuth(token))
+                .headers(headers -> headers.set(Constants.AUTH, token))
                 .retrieve()
                 .onStatus(status -> status.is4xxClientError() || status.is5xxServerError(),
                     response -> response.bodyToMono(ResponseDTO.class)
@@ -45,7 +46,7 @@ public class CoreBancarioSofka {
     public Mono<ResponseDTO<?>> saldoCuenta(int numeroCuenta, String token) {
     return webClient.get()
             .uri("/api/v1/cuenta-bancaria/mostrar-saldo-actual/{numeroCuenta}", numeroCuenta)
-            .headers(headers -> headers.setBearerAuth(token))
+            .headers(headers -> headers.set(Constants.AUTH, token))
             .retrieve()
             .onStatus(status -> status.is4xxClientError() || status.is5xxServerError(),
                 response -> response.bodyToMono(String.class)
