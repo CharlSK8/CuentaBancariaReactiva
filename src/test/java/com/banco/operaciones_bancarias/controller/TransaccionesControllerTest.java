@@ -1,10 +1,17 @@
 package com.banco.operaciones_bancarias.controller;
 
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
+
+import java.math.BigDecimal;
+import java.util.Objects;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.http.HttpStatus;
 
 import com.banco.operaciones_bancarias.component.AuditoriaLogger;
 import com.banco.operaciones_bancarias.dto.request.DepositoCuentaRequestDTO;
@@ -15,91 +22,83 @@ import com.banco.operaciones_bancarias.service.ITransaccionesService;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
-
-import java.math.BigDecimal;
-
 class TransaccionesControllerTest {
 
-        @Mock
-        private ITransaccionesService transaccionesService;
+    @Mock
+    private ITransaccionesService transaccionesService;
 
-        @Mock
-        private AuditoriaLogger auditoriaLogger;
+    @Mock
+    private AuditoriaLogger auditoriaLogger;
 
-        @InjectMocks
-        private TransaccionesController transaccionesController;
+    @InjectMocks
+    private TransaccionesController transaccionesController;
 
-        private static final String TOKEN = "Bearer token123";
+    private static final String TOKEN = "Bearer token123";
 
-        @BeforeEach
-        void setUp() {
-                MockitoAnnotations.openMocks(this);
-        }
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+    }
 
-        @Test
-        void procesarRetiroCuandoExitosoRetornaResponseOk() {
-                RetiroCuentaRequestDTO request = RetiroCuentaRequestDTO.builder()
-                        .numeroCuenta(12345)
-                        .monto(BigDecimal.valueOf(1000))
-                        .build();
-                
-                ResponseDTO<Object> expectedResponse = ResponseDTO.builder()
-                        .code(200)
-                        .message("Retiro exitoso")
-                        .response("Transacción completada")
-                        .build();
-                
-                when(transaccionesService.procesarRetiro(any(), any()))
-                        .thenReturn(Mono.just(expectedResponse));
-                when(auditoriaLogger.logEventoAuditoria(any(), any(), any(), any()))
-                        .thenReturn(Mono.empty());
+    @Test
+    void procesarRetiro_Success() {
+        RetiroCuentaRequestDTO request = new RetiroCuentaRequestDTO();
+        ResponseDTO<Object> responseDTO = new ResponseDTO<>();
+        responseDTO.setCode(200);
+        responseDTO.setMessage("Retiro exitoso");
+        responseDTO.setResponse("Transacción completada");
 
-                StepVerifier.create(transaccionesController.procesarRetiro(request, TOKEN))
-                        .expectNextMatches(responseEntity -> 
-                        responseEntity.getStatusCode().is2xxSuccessful())
-                        .verifyComplete();
-        }
+        when(transaccionesService.procesarRetiro(any(), anyString())).thenReturn(Mono.just(responseDTO));
+        when(auditoriaLogger.logEventoAuditoria(any(), any(), any(), any(BigDecimal.class))).thenReturn(Mono.empty());
 
-        @Test
-        void procesarDepositoCuandoExitosoRetornaResponseOk() {
-                DepositoCuentaRequestDTO request = DepositoCuentaRequestDTO.builder()
-                        .numeroCuenta(12345)
-                        .monto(BigDecimal.valueOf(1000))
-                        .build();
-                
-                ResponseDTO<Object> expectedResponse = ResponseDTO.builder()
-                        .code(200)
-                        .message("Depósito exitoso")
-                        .response("Transacción completada")
-                        .build();
-                
-                when(transaccionesService.procesarDeposito(any(), any()))
-                        .thenReturn(Mono.just(expectedResponse));
-                when(auditoriaLogger.logEventoAuditoriaDeposito(any(), any(), any(), any()))
-                        .thenReturn(Mono.empty());
+        StepVerifier.create(transaccionesController.procesarRetiro(request, TOKEN))
+                .expectNextMatches(response -> response.getStatusCode().is2xxSuccessful() &&
+                        Objects.requireNonNull(response.getBody()).getMessage().equals("Retiro exitoso"))
+                .verifyComplete();
+    }
 
-                StepVerifier.create(transaccionesController.procesarDeposito(request, TOKEN))
-                        .expectNextMatches(responseEntity -> responseEntity.getStatusCode().is2xxSuccessful())
-                        .verifyComplete();
-        }
+    @Test
+    void procesarRetiro_Error() {
+        RetiroCuentaRequestDTO request = new RetiroCuentaRequestDTO();
+        String errorMessage = "Error en el retiro";
 
-        @Test
-        void procesarRetiroCuandoErrorRetornaBadRequest() {
-                RetiroCuentaRequestDTO request = RetiroCuentaRequestDTO.builder()
-                        .numeroCuenta(12345)
-                        .monto(BigDecimal.valueOf(1000))
-                        .build();
-                
-                when(transaccionesService.procesarRetiro(any(), any()))
-                        .thenReturn(Mono.error(new RuntimeException("Error en el retiro")));
-                when(auditoriaLogger.logEventoAuditoria(any(), any(), any(), any()))
-                        .thenReturn(Mono.empty());
+        when(transaccionesService.procesarRetiro(any(), anyString())).thenReturn(Mono.error(new RuntimeException(errorMessage)));
+        when(auditoriaLogger.logEventoAuditoria(any(), any(), any(), any(BigDecimal.class))).thenReturn(Mono.empty());
 
-                StepVerifier.create(transaccionesController.procesarRetiro(request, TOKEN))
-                        .expectNextMatches(responseEntity -> 
-                        responseEntity.getStatusCode().is4xxClientError())
-                        .verifyComplete();
-        }
+        StepVerifier.create(transaccionesController.procesarRetiro(request, TOKEN))
+                .expectNextMatches(response -> response.getStatusCode() == HttpStatus.BAD_REQUEST &&
+                        Objects.requireNonNull(response.getBody()).getMessage().equals(errorMessage))
+                .verifyComplete();
+    }
+
+    @Test
+    void procesarDeposito_Success() {
+        DepositoCuentaRequestDTO request = new DepositoCuentaRequestDTO();
+        ResponseDTO<Object> responseDTO = new ResponseDTO<>();
+        responseDTO.setCode(200);
+        responseDTO.setMessage("Depósito exitoso");
+        responseDTO.setResponse("Transacción completada");
+
+        when(transaccionesService.procesarDeposito(any(), anyString())).thenReturn(Mono.just(responseDTO));
+        when(auditoriaLogger.logEventoAuditoriaDeposito(any(), any(), any(), any(BigDecimal.class))).thenReturn(Mono.empty());
+
+        StepVerifier.create(transaccionesController.procesarDeposito(request, TOKEN))
+                .expectNextMatches(response -> response.getStatusCode().is2xxSuccessful() &&
+                        Objects.requireNonNull(response.getBody()).getMessage().equals("Depósito exitoso"))
+                .verifyComplete();
+    }
+
+    @Test
+    void procesarDeposito_Error() {
+        DepositoCuentaRequestDTO request = new DepositoCuentaRequestDTO();
+        String errorMessage = "Error en el depósito";
+
+        when(transaccionesService.procesarDeposito(any(), anyString())).thenReturn(Mono.error(new RuntimeException(errorMessage)));
+        when(auditoriaLogger.logEventoAuditoriaDeposito(any(), any(), any(), any(BigDecimal.class))).thenReturn(Mono.empty());
+
+        StepVerifier.create(transaccionesController.procesarDeposito(request, TOKEN))
+                .expectNextMatches(response -> response.getStatusCode() == HttpStatus.BAD_REQUEST &&
+                        Objects.requireNonNull(response.getBody()).getMessage().equals(errorMessage))
+                .verifyComplete();
+    }
 }
