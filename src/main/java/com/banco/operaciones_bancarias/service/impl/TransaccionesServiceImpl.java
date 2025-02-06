@@ -24,23 +24,6 @@ public class TransaccionesServiceImpl implements ITransaccionesService{
     private final AuditoriaLogger auditoriaLogger;
     private BigDecimal saldoActual;
 
-    // @Override
-    // public Mono<ResponseDTO<?>> procesarRetiro(RetiroCuentaRequestDTO request, String token) {
-    //     return auditoriaLogger.logEventoAuditoria(Constants.INICIO, request, Constants.RETIRO)
-    //             .then(coreBancarioSofka.retiroCuenta(request, token))
-    //             .flatMap(response -> {
-    //                 if (response.getCode() != 200) {
-    //                     return auditoriaLogger.logEventoAuditoria(Constants.ERROR, request, Constants.RETIRO)
-    //                             .then(Mono.just(response));
-    //                 }
-    //                 return coreBancarioSofka.saldoCuenta(request.getNumeroCuenta(), token)
-    //                     .flatMap(saldoResponse -> 
-    //                         auditoriaLogger.logEventoAuditoria(Constants.EXITO, request,saldoResponse.getResponse().toString())
-    //                             .then(Mono.just(response))
-    //                     );
-    //             });
-    // }
-
     @Override
     public Mono<ResponseDTO<?>> procesarRetiro(RetiroCuentaRequestDTO request, String token) {
         return coreBancarioSofka.saldoCuenta(request.getNumeroCuenta(), token)
