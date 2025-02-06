@@ -17,7 +17,7 @@ public class CoreBancarioSofka {
     private final WebClient webClient;
 
     public CoreBancarioSofka(WebClient.Builder webClientBuilder) {
-        this.webClient = webClientBuilder.baseUrl("http://localhost:8080").build();
+        this.webClient = webClientBuilder.baseUrl("http://jwt:8080").build();
     }
 
     public Mono<ResponseDTO<Object>> retiroCuenta(RetiroCuentaRequestDTO request, String token) {
