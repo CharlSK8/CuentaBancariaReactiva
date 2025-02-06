@@ -150,5 +150,3 @@ Al acceder a esta URL, se puede visualizar una interfaz gráfica que muestra tod
 ## Diagrama de Componentes
 
 ![Diagrama de componentes](image.png)
-
-## Test assessment
