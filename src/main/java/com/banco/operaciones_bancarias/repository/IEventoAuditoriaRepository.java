@@ -10,8 +10,6 @@ import reactor.core.publisher.Flux;
 
 @Repository
 public interface IEventoAuditoriaRepository extends ReactiveMongoRepository<EventoAuditoria, String>{
-
     @Tailable
-	public Flux<EventoAuditoria> findWithTailableCursorByCuentaId(int cuentaId);
-
+    public Flux<EventoAuditoria> findWithTailableCursorByCuentaId(int cuentaId);
 }
