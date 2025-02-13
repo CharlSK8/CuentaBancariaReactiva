@@ -1,5 +1,6 @@
 package com.banco.operaciones_bancarias.component;
 
+import com.banco.operaciones_bancarias.utils.Constants;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -22,8 +23,7 @@ public class CoreBancarioSofka {
         return webClient.post()
                 .uri("/api/v1/cuenta-bancaria/retiro-cuenta")
                 .bodyValue(request)
-                //.headers(headers -> headers.setBearerAuth(token))
-                .headers(headers -> headers.set("Authorization", token))
+                .headers(headers -> headers.set(Constants.AUTH, token))
                 .retrieve()
                 .onStatus(status -> status.is4xxClientError() || status.is5xxServerError(),
                     response -> response.bodyToMono(ResponseDTO.class)
@@ -35,8 +35,7 @@ public class CoreBancarioSofka {
         return webClient.post()
                 .uri("/api/v1/cuenta-bancaria/deposito-cuenta")
                 .bodyValue(request)
-                //.headers(headers -> headers.setBearerAuth(token))
-                .headers(headers -> headers.set("Authorization", token))
+                .headers(headers -> headers.set(Constants.AUTH, token))
                 .retrieve()
                 .onStatus(status -> status.is4xxClientError() || status.is5xxServerError(),
                     response -> response.bodyToMono(ResponseDTO.class)
