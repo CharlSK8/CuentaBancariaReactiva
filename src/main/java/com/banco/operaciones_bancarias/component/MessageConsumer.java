@@ -19,15 +19,15 @@ public class MessageConsumer {
 
     @JmsListener(destination = "auth-queue", containerFactory = "jmsListenerContainerFactory")
     public void listenAuthQueue(Object eventMessage) {
-        processMessage(eventMessage, "auth-queue");
+        processMessage(eventMessage, "auth-queue", "AUTH_API");
     }
 
     @JmsListener(destination = "op_bank_react-queue", containerFactory = "jmsListenerContainerFactory")
     public void listenOpBankReactQueue(Object eventMessage) {
-        processMessage(eventMessage, "op_bank_react-queue");
+        processMessage(eventMessage, "op_bank_react-queue", "OPBANK_REACT");
     }
 
-    public void processMessage(Object eventMessage, String queueName) {
+    public void processMessage(Object eventMessage, String queueName, String app) {
         try {
             String jsonMessage;
 
@@ -40,13 +40,13 @@ public class MessageConsumer {
                 LOGGER.warn("Tipo de mensaje desconocido: {}", eventMessage.getClass().getName());
                 return;
             }
-            System.out.println("📩 Evento recibido de " + queueName + ": " + jsonMessage);
-            LOGGER.info("JSON Message received from {}: {}", queueName, jsonMessage);
+            System.out.println("📩 Evento recibido de APP: "+ app +" Cola: "+ queueName + ": " + jsonMessage);
+            LOGGER.info("JSON Message received from {}: Cola:{}: {}", app, queueName, jsonMessage);
 
-            eventMessageService.saveMongoDbMessages(queueName, jsonMessage).subscribe();
+            eventMessageService.saveMongoDbMessages(app, queueName, jsonMessage).subscribe();
 
         } catch (Exception e) {
-            LOGGER.error("Error processing message from {}: {}", queueName, e.getMessage(), e);
+            LOGGER.error("Error processing message from {}: Cola: {}: {}",app, queueName, e.getMessage(), e);
         }
     }
 }

@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.Map;
+
 @Data
 @Builder
 @AllArgsConstructor
@@ -14,5 +16,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class EventMessage {
 
     private String app;
-    private String message;
+    private String Queue;
+    private Map<String, Object> message;
 }
