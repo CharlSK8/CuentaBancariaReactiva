@@ -17,6 +17,14 @@ public class MessageConsumer {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MessageConsumer.class);
 
+    //Topic for Logout
+    @JmsListener(destination = "auth-topic", containerFactory = "jmsListenerContainerFactory")
+    public void listenAuthTopic2(Object eventMessage) {
+        LOGGER.info("📩 App2 Operaciones Bank React 'Topic' recibió");
+        processMessage(eventMessage, "auth-topic", "AUTH_API");
+    }
+
+    //Queues
     @JmsListener(destination = "auth-queue", containerFactory = "jmsListenerContainerFactory")
     public void listenAuthQueue(Object eventMessage) {
         processMessage(eventMessage, "auth-queue", "AUTH_API");
@@ -25,6 +33,11 @@ public class MessageConsumer {
     @JmsListener(destination = "op_bank_react-queue", containerFactory = "jmsListenerContainerFactory")
     public void listenOpBankReactQueue(Object eventMessage) {
         processMessage(eventMessage, "op_bank_react-queue", "OPBANK_REACT");
+    }
+
+    @JmsListener(destination = "app_op_bank-queue", containerFactory = "jmsListenerContainerFactory")
+    public void listenAppBancariaQueue(Object eventMessage) {
+        processMessage(eventMessage, "app_op_bank-queue", "APP_BANCARIA");
     }
 
     public void processMessage(Object eventMessage, String queueName, String app) {
