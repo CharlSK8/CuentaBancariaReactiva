@@ -1,14 +1,19 @@
 package com.banco.operaciones_bancarias.component;
 
+import com.banco.operaciones_bancarias.service.impl.EventMessageService;
 import jakarta.jms.TextMessage;
 import org.apache.activemq.command.ActiveMQTextMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Component;
 
 @Component
 public class MessageConsumer {
+
+    @Autowired
+    private EventMessageService eventMessageService;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MessageConsumer.class);
 
@@ -37,6 +42,8 @@ public class MessageConsumer {
             }
             System.out.println("📩 Evento recibido de " + queueName + ": " + jsonMessage);
             LOGGER.info("JSON Message received from {}: {}", queueName, jsonMessage);
+
+            eventMessageService.saveMongoDbMessages(queueName, jsonMessage).subscribe();
 
         } catch (Exception e) {
             LOGGER.error("Error processing message from {}: {}", queueName, e.getMessage(), e);
