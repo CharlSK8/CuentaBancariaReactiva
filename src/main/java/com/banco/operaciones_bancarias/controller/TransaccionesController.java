@@ -26,7 +26,7 @@ import reactor.core.publisher.Mono;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/transacciones")
-@CrossOrigin(origins = "http://localhost:4200")
+//@CrossOrigin(origins = "http://localhost:4200")
 @Tag(name = "Transacciones", description = "API para transacciones bancarias")
 public class TransaccionesController {
 

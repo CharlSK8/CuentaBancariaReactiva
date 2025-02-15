@@ -22,7 +22,7 @@ import reactor.core.publisher.Flux;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/auditoria")
-@CrossOrigin(origins = "http://localhost:4200")
+//@CrossOrigin(origins = "http://localhost:4200")
 @Tag(name = "EventoAuditoria", description = "API para eventos de auditoría")
 public class EventoAuditoriaController {
 
