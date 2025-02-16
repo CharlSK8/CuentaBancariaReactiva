@@ -1,10 +1,10 @@
-# Proyecto de Operaciones Bancarias
+# API Operaciones Bancarias
 
 Este proyecto es una aplicación de operaciones bancarias que permite realizar transacciones como retiros y depósitos en cuentas bancarias. La aplicación está construida utilizando Spring Boot y Reactor para programación reactiva.
 
 ## Descripción General
 
-La aplicación proporciona servicios para procesar transacciones bancarias y registrar eventos de auditoría. Los componentes principales del proyecto incluyen servicios para manejar transacciones, servicios de auditoría, y controladores para gestionar las solicitudes de los clientes.
+La aplicación proporciona servicios para procesar transacciones bancarias y registrar eventos de auditoría. Para la comunicación asincrónica y el manejo de eventos, se utiliza ActiveMQ como broker de mensajería. Los componentes principales del proyecto incluyen servicios para manejar transacciones, servicios de auditoría, y controladores para gestionar las solicitudes de los clientes.
 
 ## Dockerizar la Aplicación desde GHCR
 
