@@ -129,6 +129,7 @@ Este proyecto utiliza una variedad de tecnologías y bibliotecas para proporcion
 - **Git**: Sistema de control de versiones utilizado para el control de versiones del código fuente.
 - **Gradle**: Herramienta de construcción utilizada para compilar y ejecutar la aplicación.
 - **ActiveMQ**: Broker de mensajería utilizado para la comunicación asincrónica entre servicios.
+- **Podman**: Herramienta para la gestión de contenedores sin necesidad de un demonio en segundo plano, compatible con Docker y enfocada en la seguridad.
 
 ### URL para Transacciones en Tiempo Real
 
