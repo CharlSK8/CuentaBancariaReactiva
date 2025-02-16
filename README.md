@@ -128,6 +128,7 @@ Este proyecto utiliza una variedad de tecnologías y bibliotecas para proporcion
 - **Swagger**: Herramienta utilizada para documentar y probar APIs RESTful.
 - **Git**: Sistema de control de versiones utilizado para el control de versiones del código fuente.
 - **Gradle**: Herramienta de construcción utilizada para compilar y ejecutar la aplicación.
+- **ActiveMQ**: Broker de mensajería utilizado para la comunicación asincrónica entre servicios.
 
 ### URL para Transacciones en Tiempo Real
 
