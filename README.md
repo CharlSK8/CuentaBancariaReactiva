@@ -31,13 +31,13 @@ Este documento proporciona los pasos para obtener, ejecutar y administrar un con
 - **Descargar la imagen desde GHCR**
 
     ```sh
-    podman pull ghcr.io/charlsk8/operaciones_bancarias:v1.0.0 
+    podman pull ghcr.io/charlsk8/cuentas-bancarias-reactiva:v1.0.0
     ```
 
 - **Correr el contenedor**
 
     ```sh
-    podman run --rm --name reactivo --network=red-bank -p 8093:8093 -d ghcr.io/charlsk8/operaciones_bancarias:v1.0.0 
+    podman run --rm --name reactivo --network=red-bank -p 8093:8093 -d ghcr.io/charlsk8/cuentas-bancarias-reactiva:v1.0.0
     ```
 
 - **Probar la Aplicación**
